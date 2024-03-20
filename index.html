@@ -2,9 +2,18 @@
 <html>
 <head>
   <title>My Web Page</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <canvas id="c" style="height: 100%; width: 100%"></canvas>
+  <div class="crossHair">
+    <div id="menuPanel">
+      <button id="startButton">Click to Start</button>
+      <textarea id="senField">0.5</textarea>
+    </div>
+    <div class="left"></div>
+    <canvas id="c" style="height: 100%; width: 100%"></canvas>
+  </div>
+
   <script src="main.js" type="module"></script>
   
 </body>
