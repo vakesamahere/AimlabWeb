@@ -1,28 +1,26 @@
-//import * as THREE from "./node_modules/three/build/three.module.js";
-import * as THREE from 'three';
-import {PointerLockControls} from "./node_modules/three/examples/jsm/controls/PointerLockControls.js";
-import Stats from "three/examples/jsm/libs/stats.module";
 
+//*
 //initialize and render the scene
 const sensitivityDefault = 0.28//不开镜
 function main(){
   // 获取canvas元素，并创建一个新的WebGLRenderer渲染器，设置抗锯齿并关联到canvas
   const canvas = document.querySelector("#c");//选中id==c的元素(canvas)
-  const renderer = new THREE.WebGLRenderer({antialias:true,canvas});//渲染场景的实例，抗锯齿，在canvas画布上
+  const body = document.body;
+  const renderer = new WebGLRenderer({antialias:true,canvas});//渲染场景的实例，抗锯齿，在canvas画布上
   document.querySelector(".left").style.display = "none";//隐藏页面左侧的元素(若有)
   // 设置透视相机的参数
   const fov = 45; // 视野角度
   const aspect = 2; // 宽高比，这里设置为canvas的默认宽高比
   const near = 0.01; // 近裁剪面
   const far = 300; // 远裁剪面
-  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  const camera = new PerspectiveCamera(fov, aspect, near, far);
   camera.position.set(0, 5, 20); // 设置相机的初始位置
   camera.lookAt(0, 2, 0); // 设置相机的观察目标
   // 创建一个新的场景
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color("white"); // 设置场景背景色为白色
+  const scene = new Scene();
+  scene.background = new Color("white"); // 设置场景背景色为白色
   // 创建一个纹理加载器
-  const loader = new THREE.TextureLoader();
+  const loader = new TextureLoader();
   // 创建PointerLockControls，允许通过鼠标控制相机
   const controls = new PointerLockControls(camera, canvas);
   controls.pointerSpeed = sensitivityDefault;
@@ -39,13 +37,16 @@ function main(){
   document.querySelector(".left").display = "none";// 隐藏左侧的元素
 
   // 为开始按钮添加点击事件，锁定鼠标并启用PointerLockControls
-  startButton.addEventListener(
-    "click",
-    function () {
+  document.addEventListener('DOMContentLoaded', function() {
+    startButton.addEventListener('click', function() {
+        controls.lock();
+    });
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'q') {
       controls.lock();
-    },
-    false
-  );
+    }
+  });
   //设置灵敏度
   senField.addEventListener(
     "input",
@@ -71,31 +72,35 @@ function main(){
   document.body.appendChild(stats.dom);
   {
     const planeSize = 40;
-    // 加载棋盘格纹理并设置其重复属性
-    const texture = loader.load(
-      "https://threejs.org/manual/examples/resources/images/checker.png"
-    );
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.magFilter = THREE.NearestFilter;
-    texture.colorSpace = THREE.SRGBColorSpace;
+    // 加载棋盘格纹理并设置其重复属性getComputedStyle(body).backgroundImage
+    const image = document.getElementById('image');
+    console.log(image.src);
+
+
+    //const texture = loader.load(URL.createObjectURL('./checker.png'));
+    const texture = loader.load('https://threejs.org/manual/examples/resources/images/checker.png');
+    //const texture = loader.load('./checker.png');
+    texture.wrapS = RepeatWrapping;
+    texture.wrapT = RepeatWrapping;
+    texture.magFilter = NearestFilter;
+    texture.colorSpace = SRGBColorSpace;
     const repeats = planeSize / 2; // 计算纹理重复的次数
     texture.repeat.set(repeats, repeats);
 
     // 创建一个平面几何体和一个与之关联的基本材质
-    const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
-    const planeMat = new THREE.MeshBasicMaterial({
+    const planeGeo = new PlaneGeometry(planeSize, planeSize);
+    const planeMat = new MeshBasicMaterial({
       map: texture,
     });
     planeMat.color.setRGB(1.5, 1.5, 1.5); // 设置材质的颜色
-    const mesh = new THREE.Mesh(planeGeo, planeMat);
+    const mesh = new Mesh(planeGeo, planeMat);
     mesh.rotation.x = Math.PI * -0.5; // 旋转平面几何体
     scene.add(mesh); // 将平面添加到场景中
 
     // 创建第二个平面几何体并添加到场景中
-    const secondPlaneGeo = new THREE.PlaneGeometry(40, 30);
+    const secondPlaneGeo = new PlaneGeometry(40, 30);
     planeMat.color.setRGB(1.5, 1.5, 1.5);
-    const secondMesh = new THREE.Mesh(secondPlaneGeo, planeMat);
+    const secondMesh = new Mesh(secondPlaneGeo, planeMat);
     scene.add(secondMesh);
   }
   {
@@ -103,7 +108,7 @@ function main(){
     const sphereRadius = 1;
     const sphereWidthDivisions = 16;
     const sphereHeightDivisions = 8;
-    const sphereGeo = new THREE.SphereGeometry(
+    const sphereGeo = new SphereGeometry(
       sphereRadius,
       sphereWidthDivisions,
       sphereHeightDivisions
@@ -112,17 +117,17 @@ function main(){
     // 创建多个球体并随机放置它们
     const numSpheres = 3;
     for (let i = 0; i < numSpheres; ++i) {
-      const base = new THREE.Object3D(); // 创建一个对象作为球体的基础
+      const base = new Object3D(); // 创建一个对象作为球体的基础
       scene.add(base);
 
       const u = i / numSpheres; // 计算球体的位置
-      const x = THREE.MathUtils.lerp(-12, 12, Math.random());
-      const y = THREE.MathUtils.lerp(1, 10, Math.random());
+      const x = MathUtils.lerp(-12, 12, Math.random());
+      const y = MathUtils.lerp(1, 10, Math.random());
 
       // 创建球体的材质
-      const sphereMat = new THREE.MeshPhongMaterial();
+      const sphereMat = new MeshPhongMaterial();
       sphereMat.color.setHSL(u, 1, 0.75);
-      const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
+      const sphereMesh = new Mesh(sphereGeo, sphereMat);
       sphereMesh.position.set(x, y, 1); // 设置球体的位置
       base.add(sphereMesh); // 将球体添加到基础对象上
 
@@ -134,21 +139,21 @@ function main(){
     const skyColor = 0xb1e1ff; // 天空光颜色
     const groundColor = 0xb97a20; // 地面光颜色
     const intensity = 0.75; // 光源强度
-    const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
+    const light = new HemisphereLight(skyColor, groundColor, intensity);
     scene.add(light);
   }
   {
     // 创建一个方向光源，设置其颜色和强度
     const color = 0xffffff;
     const intensity = 2.5;
-    const light = new THREE.DirectionalLight(color, intensity);
+    const light = new DirectionalLight(color, intensity);
     light.position.set(0, 10, 5); // 设置光源位置
     light.target.position.set(-5, 0, 0); // 设置光源目标位置
     scene.add(light); // 将光源添加到场景中
     scene.add(light.target); // 将光源目标添加到场景中
   }
   // 创建一个射线投射器，用于鼠标点击时检测场景中的物体
-  const raycaster = new THREE.Raycaster();
+  const raycaster = new Raycaster();
 
   // 监听canvas的点击事件，使用射线投射器检测点击位置的物体
   window.addEventListener("mousedown", () => {
@@ -167,8 +172,8 @@ function main(){
       // 如果有物体被点击，移动该物体的位置
       const object = intersectedObjects[0].object;
       if (object.parent.type !== "Scene") {
-        object.position.x = THREE.MathUtils.lerp(-12, 12, Math.random());
-        object.position.y = THREE.MathUtils.lerp(1, 10, Math.random());
+        object.position.x = MathUtils.lerp(-12, 12, Math.random());
+        object.position.y = MathUtils.lerp(1, 10, Math.random());
       }
     }
   });
@@ -199,3 +204,4 @@ function main(){
   requestAnimationFrame(render);// 开始渲染循环
 }
 main();
+//*/

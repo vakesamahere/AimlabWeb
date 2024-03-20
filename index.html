@@ -1,20 +1,35 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="en" >
+<head>  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="description" content="Change OR Die" />
+
   <title>My Web Page</title>
   <link rel="stylesheet" href="styles.css">
-</head>
+  
+  
 <body>
+  <style type="text/css">
+    *
+    body {
+      background-image:url(checker.png);
+    }
+    
+    </style>
+    
+</head>
   <div class="crossHair">
     <div id="menuPanel">
       <button id="startButton">Click to Start</button>
-      <textarea id="senField">0.5</textarea>
+      <textarea id="senField"></textarea>
     </div>
     <div class="left"></div>
     <canvas id="c" style="height: 100%; width: 100%"></canvas>
   </div>
-
-  <script src="main.js" type="module"></script>
+  <img id="image" src="./checker.png"></img>
+  <script src="./three.packed.js"></script>
+  <script src="./main.js"></script>
   
 </body>
 </html>
+<br></br>
